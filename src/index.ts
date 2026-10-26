@@ -27,7 +27,18 @@ export default {
 		ctx: ExecutionContext,
 	): Promise<Response> {
 		const url = new URL(request.url);
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
 
+if (request.method === "OPTIONS" && url.pathname === "/api/chat") {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
+}
 		// Handle static assets (frontend)
 		if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
 			return env.ASSETS.fetch(request);
@@ -84,9 +95,11 @@ async function handleChatRequest(
 
 		return new Response(stream, {
 			headers: {
+			
 				"content-type": "text/event-stream; charset=utf-8",
 				"cache-control": "no-cache",
 				connection: "keep-alive",
+				"Access-Control-Allow-Origin": "http://127.0.0.1:5500",
 			},
 		});
 	} catch (error) {
