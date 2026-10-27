@@ -8,14 +8,30 @@
  * @license MIT
  */
 import { Env, ChatMessage } from "./types";
+import { HELP_DOCS } from "../docs/help-docs";
 
 // Model ID for Workers AI model
 // https://developers.cloudflare.com/workers-ai/models/
 const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
 
 // Default system prompt
-const SYSTEM_PROMPT =
-	"You are a helpful, friendly assistant. Provide concise and accurate responses.";
+const SYSTEM_PROMPT = `
+You are an AI support assistant for an online learning platform.
+
+Your job is to help learners using the help documents provided below.
+
+RULES:
+1. Only answer questions using the help documents.
+2. If the documents contain the answer, explain it clearly.
+3. Mention which document you used.
+4. If the documents do not contain the answer, say:
+   "I cannot assist with this issue. Please log a support ticket."
+5. Never make up information.
+6. Keep answers simple and friendly.
+
+HELP DOCUMENTS:
+${HELP_DOCS}
+`;
 
 export default {
 	/**
